@@ -19,10 +19,8 @@
     answerOne: "Answer 1",
     answerTwo: "Answer 2",
     answerThree: "Answer 3",
-    answerFour: "Answer 4",
-    correctAnswer: function() {
-      return this.answerFour;
-    }
+    answerFour: "Correct Answer",
+    correctAnswer: "Correct Answer"
   };
 
   var questionTwo = {
@@ -31,9 +29,7 @@
     answerTwo: "Answer 2",
     answerThree: "Answer 3",
     answerFour: "Answer 4",
-    correctAnswer: function() {
-      return this.answerTwo;
-    }
+    correctAnswer: "Answer 4"
   };
 
   var questionThree = {
@@ -42,9 +38,7 @@
     answerTwo: "Answer 2",
     answerThree: "Answer 3",
     answerFour: "Answer 4",
-    correctAnswer: function() {
-      return this.answerFour;
-    }
+    correctAnswer: "Answer 4"
   };
 
   var questionFour = {
@@ -53,9 +47,7 @@
     answerTwo: "Answer 2",
     answerThree: "Answer 3",
     answerFour: "Answer 4",
-    correctAnswer: function() {
-      return this.answerFour;
-    }
+    correctAnswer: "Answer 4"
   };
   //push the questions into the array
   questionsArray.push(questionOne);
@@ -83,10 +75,13 @@
 
   //countdown function
   function startTheTimer() {
+    var winner = false;
     timer = timer - 1;
     $("#timer").text("Time Left: " + timer);
     if (timer == 0) {
-      nextQuestion();
+      clearTimer();
+      revealAnswer(winner, questionsArray[count - 1]);
+      setTimeout(nextQuestion, 2000);
     }
   }
 
@@ -115,15 +110,46 @@
   }
 
   //function to check if it's the correct answer
-  function checkAnswer(target) {
-    if (target == this.correctAnswer) {
+  function checkAnswer(event) {
+    var selectedAnswer = event.target.textContent;
+
+    console.log("SANITY CHECK", selectedAnswer);
+    if (selectedAnswer == questionsArray[count - 1].correctAnswer) {
+      var winner = true;
+      clearTimer();
       correct = correct + 1;
+      console.log(questionsArray[count - 1].correctAnswer);
       console.log("winner");
-      nextQuestion();
+      revealAnswer(winner, questionsArray[count - 1]);
+      setTimeout(nextQuestion, 2000);
     } else {
+      var winner = false;
+      clearTimer();
       wrong = wrong + 1;
+      console.log("TARGET", event);
+      console.log(questionsArray[count - 1].correctAnswer);
+      console.log(count - 1);
       console.log("loser");
-      nextQuestion();
+      revealAnswer(winner, questionsArray[count - 1]);
+      setTimeout(nextQuestion, 2000);
+    }
+  }
+
+  //function to reaveal the answer
+  function revealAnswer(answer, object) {
+    $("#question").empty();
+    $("#answer-one").empty();
+    $("#answer-two").empty();
+    $("#answer-three").empty();
+    $("#answer-four").empty();
+
+    if (answer == true) {
+      $("#question").text("CORRECT!");
+    } else {
+      $("#question").text("INCORRECT!");
+      $("#answer-one").text("The correct answer is: " + object.correctAnswer);
+      console.log(object);
+      console.log(object.correctAnswer);
     }
   }
 
