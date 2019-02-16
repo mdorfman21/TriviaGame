@@ -12,6 +12,7 @@
   //initialize wrong and right scores
   var wrong = 0;
   var correct = 0;
+  var unanswered = 0;
 
   //create each question object
   var questionOne = {
@@ -63,6 +64,7 @@
     $("#question-number").text("Question Number " + questionCount + "!");
     $("#correct").text("Correct Answers: " + correct);
     $("#wrong").text("Wrong Answers: " + wrong);
+    $("#unanswered").text("Unanswered: " + unanswered);
     $("#timer").text("Time Left: " + timer);
     $("#question").text(object.question);
     $("#answer-one").text(object.answerOne);
@@ -79,6 +81,8 @@
     timer = timer - 1;
     $("#timer").text("Time Left: " + timer);
     if (timer == 0) {
+      unanswered = unanswered + 1;
+      $("#unanswered").text("Unanswered: " + unanswered);
       clearTimer();
       revealAnswer(winner, questionsArray[count - 1]);
       setTimeout(nextQuestion, 2000);
@@ -118,6 +122,7 @@
       var winner = true;
       clearTimer();
       correct = correct + 1;
+      $("#correct").text("Correct Answers: " + correct);
       console.log(questionsArray[count - 1].correctAnswer);
       console.log("winner");
       revealAnswer(winner, questionsArray[count - 1]);
@@ -126,6 +131,7 @@
       var winner = false;
       clearTimer();
       wrong = wrong + 1;
+      $("#wrong").text("Wrong Answers: " + wrong);
       console.log("TARGET", event);
       console.log(questionsArray[count - 1].correctAnswer);
       console.log(count - 1);
@@ -153,6 +159,31 @@
     }
   }
 
+  //create a hover for the answers
+  $(".answer").hover(
+    function() {
+      $(this).addClass("hover");
+    },
+    function() {
+      $(this).removeClass("hover");
+    }
+  );
+
+  //create if statement for gameover
+  if (count > questionsArray.length + 1) {
+    gameOver();
+  }
+
+  //create gameover function
+  function gameOver() {
+    $("#question").empty();
+    $("#answer-one").empty();
+    $("#answer-two").empty();
+    $("#answer-three").empty();
+    $("#answer-four").empty();
+  }
+
+  //start the game
   $("#start").on("click", firstQuestion);
   $(".answer").on("click", checkAnswer);
 })();
