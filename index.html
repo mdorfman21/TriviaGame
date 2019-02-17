@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Page Title</title>
+    <title>Inception Trivia</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link
       rel="stylesheet"
@@ -17,12 +17,23 @@
       media="screen"
       href="./assets/css/styles.css"
     />
+    <audio id="inception">
+      <source src="./assets/images/inceptionbutton.mp3" type="audio/mpeg" />
+    </audio>
+    <audio id="soundtrack">
+      <source
+        src="./assets/images/Inception Soundtrack HD - #12 Time (Hans Zimmer).mp3"
+        type="audio/mpeg"
+      />
+    </audio>
+    ;
   </head>
   <body>
     <div class="jumbotron">
-      <h1 class="display-4">Trivia Game</h1>
+      <h1 class="display-4">Inception Trivia Game</h1>
       <p class="lead">
-        Test your knowledge by clicking the button below to start the game!
+        Test your knowledge of Inception by clicking the button below to start
+        the game!
       </p>
       <hr class="my-4" />
       <a class="btn btn-primary btn-lg" role="button" id="start">Start</a>
@@ -43,9 +54,9 @@
           <h4 id="question"></h4>
           <div class="row">
             <div class="col-md-12">
-              <p class="answer" id="answer-one"></p>
-              <p class="answer" id="answer-two"></p>
-              <p class="answer" id="answer-three"></p>
+              <p class="answer right-answers" id="answer-one"></p>
+              <p class="answer wrong-answers" id="answer-two"></p>
+              <p class="answer unanswered" id="answer-three"></p>
               <p class="answer" id="answer-four"></p>
             </div>
           </div>

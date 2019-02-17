@@ -1,4 +1,6 @@
 (function() {
+  //I can't get the audio to play when the document loads
+  $("audio#soundtrack")[0].play();
   //Create empty question array for a carousel and initialize the count for index
   var questionsArray = [];
   var count = 0;
@@ -16,45 +18,75 @@
 
   //create each question object
   var questionOne = {
-    question: "The question goes here (one)",
-    answerOne: "Answer 1",
-    answerTwo: "Answer 2",
-    answerThree: "Answer 3",
-    answerFour: "Correct Answer",
-    correctAnswer: "Correct Answer"
+    question: "Who composes the soundtrack to Inception?",
+    answerOne: "John Williams",
+    answerTwo: "Hans Zimmer",
+    answerThree: "Danny Elfman",
+    answerFour: "Howard Shore",
+    correctAnswer: "Hans Zimmer"
   };
 
   var questionTwo = {
-    question: "The question goes here (two)",
-    answerOne: "Answer 1",
-    answerTwo: "Answer 2",
-    answerThree: "Answer 3",
-    answerFour: "Answer 4",
-    correctAnswer: "Answer 4"
+    question: "Who did Cobb perform inception on first?",
+    answerOne: "Mal",
+    answerTwo: "Ariadne",
+    answerThree: "Arthur",
+    answerFour: "Saito",
+    correctAnswer: "Mal"
   };
 
   var questionThree = {
-    question: "The question goes here (three)",
-    answerOne: "Answer 1",
-    answerTwo: "Answer 2",
-    answerThree: "Answer 3",
-    answerFour: "Answer 4",
-    correctAnswer: "Answer 4"
+    question: "Besides reality, how many levels of dreams are there?",
+    answerOne: "6",
+    answerTwo: "3",
+    answerThree: "4",
+    answerFour: "10",
+    correctAnswer: "4"
   };
 
   var questionFour = {
-    question: "The question goes here (four)",
-    answerOne: "Answer 1",
-    answerTwo: "Answer 2",
-    answerThree: "Answer 3",
-    answerFour: "Answer 4",
-    correctAnswer: "Answer 4"
+    question: "Why can Cobb never return to the United States?",
+    answerOne: "He robbed a liquor store",
+    answerTwo: "He stole a plane",
+    answerThree: "He robbed a bank",
+    answerFour: "The police think he killed his wife",
+    correctAnswer: "The police think he killed his wife"
+  };
+
+  var questionFive = {
+    question: "Who does Cobb go into limbo to save?",
+    answerOne: "Ariadne",
+    answerTwo: "Saito",
+    answerThree: "Yusuf",
+    answerFour: "Eames",
+    correctAnswer: "Saito"
+  };
+
+  var questionSix = {
+    question: "How does Cobb know he is not in a dream?",
+    answerOne: "He spins his top",
+    answerTwo: "He pinches himself",
+    answerThree: "Eames tells him",
+    answerFour: "Mal throws him to the ground",
+    correctAnswer: "He spins his top"
+  };
+
+  var questionSeven = {
+    question: "Why does Saito employ Cobb and his associates?",
+    answerOne: "He wants Cobb to be able to go home",
+    answerTwo: "He wants to know what his own dreams mean",
+    answerThree: "To get Mr. Fischer to dissolve his father's company",
+    answerFour: "Saito wants to make millions with inception",
+    correctAnswer: "To get Mr. Fischer to dissolve his father's company"
   };
   //push the questions into the array
   questionsArray.push(questionOne);
   questionsArray.push(questionTwo);
   questionsArray.push(questionThree);
   questionsArray.push(questionFour);
+  questionsArray.push(questionFive);
+  questionsArray.push(questionSix);
+  questionsArray.push(questionSeven);
 
   //pass the array index into this function
   function revealQuestion(object) {
@@ -85,7 +117,7 @@
       $("#unanswered").text("Unanswered: " + unanswered);
       clearTimer();
       revealAnswer(winner, questionsArray[count - 1]);
-      setTimeout(nextQuestion, 2000);
+      setTimeout(nextQuestion, 2500);
     }
   }
 
@@ -96,7 +128,11 @@
 
   //create the next question function
   function nextQuestion() {
-    revealQuestion(questionsArray[count]);
+    if (count == questionsArray.length) {
+      gameOver();
+    } else {
+      revealQuestion(questionsArray[count]);
+    }
   }
 
   //clear the timer
@@ -106,10 +142,17 @@
 
   //function to start the game at the first question
   function firstQuestion() {
+    $("#correct").text("Correct Answers: " + correct);
+    $("#wrong").text("Wrong Answers: " + wrong);
+    $("#unanswered").text("Unanswered: " + unanswered);
+    $("#timer").text("Time Left: " + timer);
+    $(".answer").on("click", checkAnswer);
+    createHover();
     questionCount = 1;
     count = 0;
     correct = 0;
     wrong = 0;
+    unanswered = 0;
     revealQuestion(questionsArray[0]);
   }
 
@@ -119,6 +162,7 @@
 
     console.log("SANITY CHECK", selectedAnswer);
     if (selectedAnswer == questionsArray[count - 1].correctAnswer) {
+      $("audio#inception")[0].play();
       var winner = true;
       clearTimer();
       correct = correct + 1;
@@ -126,7 +170,8 @@
       console.log(questionsArray[count - 1].correctAnswer);
       console.log("winner");
       revealAnswer(winner, questionsArray[count - 1]);
-      setTimeout(nextQuestion, 2000);
+
+      setTimeout(nextQuestion, 2500);
     } else {
       var winner = false;
       clearTimer();
@@ -137,7 +182,7 @@
       console.log(count - 1);
       console.log("loser");
       revealAnswer(winner, questionsArray[count - 1]);
-      setTimeout(nextQuestion, 2000);
+      setTimeout(nextQuestion, 2500);
     }
   }
 
@@ -160,19 +205,18 @@
   }
 
   //create a hover for the answers
-  $(".answer").hover(
-    function() {
-      $(this).addClass("hover");
-    },
-    function() {
-      $(this).removeClass("hover");
-    }
-  );
+  function createHover() {
+    $(".answer").hover(
+      function() {
+        $(this).addClass("hover");
+      },
+      function() {
+        $(this).removeClass("hover");
+      }
+    );
+  }
 
   //create if statement for gameover
-  if (count > questionsArray.length + 1) {
-    gameOver();
-  }
 
   //create gameover function
   function gameOver() {
@@ -181,9 +225,25 @@
     $("#answer-two").empty();
     $("#answer-three").empty();
     $("#answer-four").empty();
+    $(".answer").off();
+    $("#question").text("Game Over, Press the Start button to restart");
+    $(".right-answers").text(
+      "Percentage Correct: " +
+        Math.round((correct / questionsArray.length) * 100) +
+        "%"
+    );
+    $(".wrong-answers").text(
+      "Percentage Incorrect: " +
+        Math.round((wrong / questionsArray.length) * 100) +
+        "%"
+    );
+    $(".unanswered").text(
+      "Percentage Unanswered: " +
+        Math.round((unanswered / questionsArray.length) * 100) +
+        "%"
+    );
   }
 
   //start the game
   $("#start").on("click", firstQuestion);
-  $(".answer").on("click", checkAnswer);
 })();
